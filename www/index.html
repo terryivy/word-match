@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>单词消消乐</title>
+<link rel="stylesheet" href="styles.css">
+<script src="data/words-1.js"></script>
+<script src="data/words-2.js"></script>
+<script src="data/words-3.js"></script>
+<script src="data/words-4.js"></script>
+<script src="data/words-5.js"></script>
+<script src="data/grammar.js"></script>
+</head>
+<body>
+<div id="bg-bubbles"></div>
+<canvas id="fx"></canvas>
+
+<div id="app">
+  <!-- 首页 -->
+  <section id="screen-home" class="screen active">
+    <div class="home-mascot" id="home-mascot">🐱</div>
+    <h1 class="game-title">单词消消乐</h1>
+    <p class="game-subtitle">连对单词和中文，把它们全部消除！</p>
+    <div class="home-best">🏆 最高分 <span id="home-best">0</span></div>
+    <div class="home-btns">
+      <button class="big-btn primary" id="btn-start">▶ 开始游戏</button>
+      <button class="big-btn" id="btn-levels">🗺 选择关卡</button>
+      <button class="big-btn ghost" id="btn-how">❓ 玩法说明</button>
+    </div>
+    <button class="icon-btn sound-toggle" id="btn-sound-home" title="音效开关">🔊</button>
+  </section>
+
+  <!-- 选关 -->
+  <section id="screen-levels" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" id="btn-levels-back">←</button>
+      <h2>选择关卡</h2>
+      <span class="topbar-spacer"></span>
+    </div>
+    <div class="level-grid" id="level-grid"></div>
+  </section>
+
+  <!-- 游戏 -->
+  <section id="screen-game" class="screen">
+    <div class="hud">
+      <div class="hud-left">
+        <div class="hud-chip">🎯 第 <span id="hud-level">1</span> 关</div>
+        <div class="hud-chip score-chip">⭐ <span id="hud-score">0</span></div>
+      </div>
+      <div class="hud-mid">
+        <div class="combo-meter" id="combo-meter"><span id="combo-text">连击 x0</span></div>
+      </div>
+      <div class="hud-right">
+        <div class="hud-chip">⏱ <span id="hud-time">0:00</span></div>
+        <button class="icon-btn" id="btn-hint" title="提示">💡<span id="hint-count">3</span></button>
+        <button class="icon-btn" id="btn-sound" title="音效">🔊</button>
+        <button class="icon-btn" id="btn-pause" title="暂停">⏸</button>
+      </div>
+    </div>
+    <div class="mascot-row">
+      <div class="mini-mascot" id="mini-mascot">🐱</div>
+      <div class="speech" id="speech">加油！把它们配成对吧！</div>
+    </div>
+    <div id="board-wrap">
+      <div id="board"></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-text" id="progress-text">0 / 0</div>
+    </div>
+  </section>
+</div>
+
+<!-- 弹窗 -->
+<div id="modal-mask" class="hidden">
+  <div class="modal" id="modal-box"></div>
+</div>
+
+<div id="banner-layer"></div>
+<div id="float-layer"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

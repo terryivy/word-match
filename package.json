@@ -1,0 +1,1 @@
+{"dependencies":{"@capacitor/cli":"^6.2.2","@capacitor/core":"^6.2.2","@capacitor/ios":"^6.2.2"},"description":"单词消消乐 - 边玩游戏边学英语","name":"word-match","scripts":{"sync":"cap sync ios"},"version":"1.0.0"}
