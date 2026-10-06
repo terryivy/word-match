@@ -28,6 +28,7 @@
     <div class="home-btns">
       <button class="big-btn primary" id="btn-start">▶ 开始游戏</button>
       <button class="big-btn" id="btn-levels">🗺 选择关卡</button>
+      <button class="big-btn" id="btn-write">✍️ 单词书写</button>
       <button class="big-btn ghost" id="btn-how">❓ 玩法说明</button>
     </div>
     <button class="icon-btn sound-toggle" id="btn-sound-home" title="音效开关">🔊</button>
@@ -41,6 +42,39 @@
       <span class="topbar-spacer"></span>
     </div>
     <div class="level-grid" id="level-grid"></div>
+  </section>
+
+  <!-- 单词书写 -->
+  <section id="screen-write" class="screen">
+    <div class="topbar">
+      <button class="icon-btn" id="btn-write-back">←</button>
+      <h2>✍️ 单词书写</h2>
+      <span class="topbar-spacer"></span>
+    </div>
+    <div class="write-scroll">
+      <div class="write-word-card">
+        <div class="ww-top">
+          <div class="ww-info">
+            <div class="ww-en" id="ww-en"></div>
+            <div class="ww-phon" id="ww-phon"></div>
+            <div class="ww-cn" id="ww-cn"></div>
+          </div>
+          <button class="ww-speak" id="ww-speak" title="朗读">🔊</button>
+        </div>
+      </div>
+      <div class="write-progress" id="write-progress"></div>
+      <canvas id="wcv"></canvas>
+      <div class="write-toolbar">
+        <div class="seg" id="modeSeg"><button data-m="trace" class="on">描红</button><button data-m="copy">临摹</button></div>
+        <div class="colors" id="colorRow"></div>
+      </div>
+      <div class="write-btns">
+        <button class="big-btn ghost" id="ww-prev">‹ 上一个</button>
+        <button class="big-btn ghost" id="ww-clear">🧹 清除</button>
+        <button class="big-btn primary" id="ww-next">下一个 ›</button>
+      </div>
+      <button class="big-btn" id="ww-random" style="margin-top:10px">🎲 随机单词</button>
+    </div>
   </section>
 
   <!-- 游戏 -->

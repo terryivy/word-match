@@ -450,6 +450,128 @@ function renderLevels(){
   }
 }
 
+/* ========== 单词书写 ========== */
+function speakWord(t){
+  try{
+    if(!window.speechSynthesis) return;
+    speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(t);
+    u.lang = "en-US"; u.rate = 0.75;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+var WRT = {idx:0, mode:"trace", color:"#1e1e2e", cv:null, ctx:null, dpr:1, drawing:false, last:null};
+var WRT_COLORS = ["#1e1e2e","#4f46e5","#dc2626","#16a34a","#d97706"];
+var WRT_H = 300;
+function startWriting(){
+  WRT.idx = (Math.random()*WORDS.length)|0;
+  renderWriteWord();
+  show("screen-write");
+  initWriteCanvas();
+}
+function renderWriteWord(){
+  var w = WORDS[WRT.idx];
+  $("ww-en").textContent = w.w;
+  $("ww-phon").textContent = w.phon||"";
+  $("ww-cn").textContent = w.cn;
+  $("write-progress").textContent = "第 "+(WRT.idx+1)+" / "+WORDS.length+" 个";
+  redrawWrite();
+}
+function initWriteCanvas(){
+  var cv = $("wcv");
+  WRT.cv = cv;
+  var rect = cv.getBoundingClientRect();
+  WRT.dpr = Math.min(2, window.devicePixelRatio||1);
+  var W = Math.max(280, rect.width||320);
+  cv.width = Math.round(W*WRT.dpr); cv.height = Math.round(WRT_H*WRT.dpr);
+  cv.style.width = W+"px"; cv.style.height = WRT_H+"px";
+  WRT.ctx = cv.getContext("2d");
+  redrawWrite();
+  var pos = function(e){
+    var r = cv.getBoundingClientRect();
+    var t = (e.touches&&e.touches[0])||e;
+    return {x:t.clientX-r.left, y:t.clientY-r.top};
+  };
+  var dot = function(p){
+    var c = WRT.ctx;
+    c.fillStyle = WRT.color;
+    c.beginPath(); c.arc(p.x,p.y,3.2,0,7); c.fill();
+  };
+  var seg = function(a,b){
+    var c = WRT.ctx;
+    c.strokeStyle = WRT.color; c.lineWidth = 6; c.lineCap = "round"; c.lineJoin = "round";
+    var mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    c.beginPath(); c.moveTo(a.x,a.y);
+    c.quadraticCurveTo(a.x,a.y,mx,my);
+    c.quadraticCurveTo(b.x,b.y,b.x,b.y);
+    c.stroke();
+  };
+  cv.ontouchstart = function(e){ e.preventDefault(); WRT.drawing=true; WRT.last=pos(e); dot(WRT.last); };
+  cv.ontouchmove = function(e){ e.preventDefault(); if(!WRT.drawing) return; var p=pos(e); seg(WRT.last,p); WRT.last=p; };
+  cv.ontouchend = function(){ WRT.drawing=false; };
+  cv.ontouchcancel = function(){ WRT.drawing=false; };
+  cv.onmousedown = function(e){ WRT.drawing=true; WRT.last=pos(e); dot(WRT.last); };
+  cv.onmousemove = function(e){ if(!WRT.drawing) return; var p=pos(e); seg(WRT.last,p); WRT.last=p; };
+  cv.onmouseup = function(){ WRT.drawing=false; };
+  cv.onmouseleave = function(){ WRT.drawing=false; };
+}
+function redrawWrite(){
+  var ctx = WRT.ctx, cv = WRT.cv;
+  if(!ctx||!cv) return;
+  var dpr = WRT.dpr, W = cv.width/dpr, H = WRT_H;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = "#ffffff"; ctx.fillRect(0,0,W,H);
+  /* 四线三格 */
+  var top = 44, bottom = H-44, gap = (bottom-top)/3, i, y;
+  ctx.lineWidth = 2; ctx.strokeStyle = "#e5b8d0";
+  for(i=0;i<4;i++){
+    y = top+i*gap;
+    ctx.beginPath(); ctx.moveTo(16,y); ctx.lineTo(W-16,y); ctx.stroke();
+  }
+  ctx.lineWidth = 3; ctx.strokeStyle = "#e78bb0";
+  ctx.beginPath(); ctx.moveTo(16,top+2*gap); ctx.lineTo(W-16,top+2*gap); ctx.stroke();
+  /* 描红字 */
+  if(WRT.mode==="trace"){
+    var word = WORDS[WRT.idx].w;
+    ctx.fillStyle = "rgba(120,130,170,.30)";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    var fs = 72, maxW = W-70;
+    var setF = function(s){ ctx.font = "700 "+s+'px "Chalkboard SE","Comic Sans MS","Segoe Print",cursive,sans-serif'; };
+    setF(fs);
+    var tw = ctx.measureText(word).width;
+    if(tw>maxW){ fs = Math.max(28, Math.floor(fs*maxW/tw)); setF(fs); }
+    ctx.fillText(word, W/2, top+1.5*gap+2);
+  }
+}
+$("btn-write").onclick = function(){ SFX.tap(); startWriting(); };
+$("btn-write-back").onclick = function(){ SFX.tap(); goHome(); };
+$("ww-prev").onclick = function(){ SFX.tap(); WRT.idx=(WRT.idx-1+WORDS.length)%WORDS.length; renderWriteWord(); };
+$("ww-next").onclick = function(){ SFX.tap(); WRT.idx=(WRT.idx+1)%WORDS.length; renderWriteWord(); };
+$("ww-random").onclick = function(){ SFX.tap(); WRT.idx=(Math.random()*WORDS.length)|0; renderWriteWord(); };
+$("ww-clear").onclick = function(){ SFX.tap(); redrawWrite(); };
+$("ww-speak").onclick = function(){ speakWord(WORDS[WRT.idx].w); };
+document.querySelectorAll("#modeSeg button").forEach(function(b){
+  b.onclick = function(){
+    WRT.mode = b.getAttribute("data-m"); SFX.tap();
+    document.querySelectorAll("#modeSeg button").forEach(function(x){ x.classList.toggle("on", x===b); });
+    redrawWrite();
+  };
+});
+(function(){
+  var row = $("colorRow");
+  WRT_COLORS.forEach(function(c){
+    var s = document.createElement("span");
+    s.className = "cdot"+(c===WRT.color?" on":"");
+    s.style.background = c;
+    s.onclick = function(){
+      WRT.color = c; SFX.tap();
+      row.querySelectorAll(".cdot").forEach(function(x){ x.classList.toggle("on", x===s); });
+    };
+    row.appendChild(s);
+  });
+})();
+
 /* 启动 */
 renderHomeBest();
 $("home-mascot").textContent = "🐱";

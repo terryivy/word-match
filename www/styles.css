@@ -207,3 +207,26 @@ body{
   .combo-meter{font-size:15px;padding:7px 14px}
   #board{gap:9px}
 }
+
+/* ========== 单词书写 ========== */
+.write-scroll{flex:1;min-height:0;overflow-y:auto;padding:4px 2px 20px;-webkit-overflow-scrolling:touch}
+.write-word-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:16px;margin-bottom:10px}
+.ww-top{display:flex;align-items:flex-start;gap:10px}
+.ww-info{flex:1}
+.ww-en{font-size:36px;font-weight:800;color:var(--gold);line-height:1.2;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+.ww-phon{color:rgba(255,255,255,.6);font-size:13px;margin:2px 0 4px}
+.ww-cn{font-size:17px;font-weight:600}
+.ww-speak{flex:0 0 auto;width:52px;height:52px;border:none;border-radius:50%;background:rgba(255,255,255,.14);font-size:24px;cursor:pointer;border:1px solid rgba(255,255,255,.25)}
+.ww-speak:active{transform:scale(.92)}
+.write-progress{text-align:center;font-size:13px;color:rgba(255,255,255,.6);margin:2px 0 8px}
+#wcv{display:block;width:100%;height:300px;background:#fff;border-radius:16px;touch-action:none;cursor:crosshair;box-shadow:0 4px 16px rgba(0,0,0,.35)}
+.write-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 2px}
+.seg{display:flex;background:rgba(255,255,255,.1);border-radius:12px;padding:3px;border:1px solid rgba(255,255,255,.12)}
+.seg button{border:none;background:none;padding:8px 20px;border-radius:9px;font-size:14px;font-weight:700;color:rgba(255,255,255,.55);cursor:pointer}
+.seg button.on{background:linear-gradient(180deg,#a5ff9e,#3ddc5f);color:#063d1a}
+.colors{display:flex;gap:10px;align-items:center}
+.cdot{width:30px;height:30px;border-radius:50%;cursor:pointer;border:3px solid transparent;box-shadow:inset 0 0 0 2px rgba(255,255,255,.5)}
+.cdot.on{box-shadow:0 0 0 2px #1a1b3a,0 0 0 4px var(--gold)}
+.write-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.write-btns .big-btn{padding:12px 4px;font-size:15px}
+#ww-random{width:100%}
